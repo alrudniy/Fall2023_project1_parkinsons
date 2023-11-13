@@ -1,0 +1,1 @@
+Fix of structure
