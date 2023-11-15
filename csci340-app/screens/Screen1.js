@@ -10,6 +10,8 @@ const LoginScreen = () => {
 
   const [password, setPassword] = useState('');
 
+  const navigation = useNavigation();
+
   const handleLogin = () => {
     
     if (username === 'user' && password === 'pass') {
