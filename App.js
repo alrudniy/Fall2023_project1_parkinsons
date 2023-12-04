@@ -1,55 +1,44 @@
-// App.js
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Login from './screens/Login';
+import Home from './screens/Home';
+import Details from './screens/Details';
+import quizQuestions from './screens/quizQuestions'; // Correct case
 
+const Stack = createStackNavigator();
 
-import {NavigationContainer} from '@react-navigation/native'
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
-import Screen1 from './screens/Screen1';
-import Screen2 from './screens/Screen2';
-import Screen3 from './screens/Screen3';
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-
-const Tab = createBottomTabNavigator();
-
-
-const App: () => React$Node = () => {
   return (
-    <>
-      <NavigationContainer>
-        <Tab.Navigator
-          tabBarOptions={{
-            labelStyle: {fontSize:18},
-            activeTintColor: 'red',
-            inactiveTintColor: 'black'
-          }}
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={isLoggedIn ? 'Home' : 'Login'}>
+        <Stack.Screen
+          name="Login"
+          options={{ title: 'Login' }}
         >
-          <Tab.Screen
-            name="Screen 1"
-            component={Screen1}
-          />
-          <Tab.Screen
-            name="Screen 2"
-            component={Screen2}
-          />
-          <Tab.Screen
-            name="Screen 3"
-            component={Screen3}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </>
+          {(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
+        </Stack.Screen>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{ title: 'Home' }}
+        />
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          options={{ title: 'Details' }}
+        />
+        {/* Add the QuizQuestions screen */}
+        <Stack.Screen
+          name="quizQuestions"
+          component={quizQuestions}
+          options={{ title: 'Quiz Questions' }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-
-
 
 export default App;
