@@ -1,10 +1,11 @@
+//App.js
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screens/Login';
 import Home from './screens/Home';
-import Details from './screens/Details';
-import quizQuestions from './screens/quizQuestions'; // Correct case
+import calendarFunction from './screens/calendarFunction';
+import quizQuestions from './screens/quizQuestions';
 
 const Stack = createStackNavigator();
 
@@ -26,9 +27,9 @@ const App = () => {
           options={{ title: 'Home' }}
         />
         <Stack.Screen
-          name="Details"
-          component={Details}
-          options={{ title: 'Details' }}
+          name="calendarFunction"
+          component={calendarFunction}
+          options={{ title: 'Calendar' }}
         />
         {/* Add the QuizQuestions screen */}
         <Stack.Screen
@@ -36,6 +37,7 @@ const App = () => {
           component={quizQuestions}
           options={{ title: 'Quiz Questions' }}
         />
+        
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,4 +1,4 @@
-// screens/Home.js
+// Home.js
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -7,7 +7,7 @@ const Home = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.welcomeMessage}>Welcome, user!</Text>
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Details')}>
+        <TouchableOpacity onPress={() => navigation.navigate('calendarFunction')}>
           <Image
             source={require('../images/calendarImage.jpg')}
             style={styles.calendarImage}
@@ -20,7 +20,7 @@ const Home = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => navigation.navigate('Details')}>
+      <TouchableOpacity onPress={() => navigation.navigate('calendarFunction')}>
         <Text style={styles.buttonText}>Go to calendar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('quizQuestions')}>

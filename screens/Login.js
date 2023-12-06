@@ -1,4 +1,4 @@
-//login.js 
+//Login.js 
 import React, { useState } from 'react';
 import {
   View,
@@ -16,7 +16,7 @@ const Login = ({ navigation, setIsLoggedIn }) => {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = () => {
-    if (username === 'user' && password === 'pass') {
+    if (username === '' && password === '') {
       // Successful login
       setIsLoggedIn(true);
       navigation.navigate('Home');

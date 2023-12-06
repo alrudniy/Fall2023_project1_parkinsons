@@ -1,10 +1,20 @@
+//quizQuestions.js
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TextInput, Platform } from 'react-native';
+import CalendarFunction from './calendarFunction';
 
-const quizQuestions = ({ navigation }) => {
+const QuizQuestions = ({ navigation }) => {
+  
   const [showQuestionnaire, setShowQuestionnaire] = useState(false);
-  const [answers, setAnswers] = useState({});
+  
+  
+  const [answers, setAnswers] = useState({}); //Stores Questions
+  
+  
   const [currentQuestion, setCurrentQuestion] = useState(1);
+ 
+  const [sliderValue, setSliderValue] = useState(5); // Initial value for the slider
+  
 
   const questions = [
     "(Mental Health) How well can you remember things? (1-10)",
@@ -51,9 +61,19 @@ const quizQuestions = ({ navigation }) => {
     setCurrentQuestion(currentQuestion - 1);
   };
 
+  const handleSliderChange = (value) => {
+    setSliderValue(value);
+  };
+
+  const handleCompleteQuestionnaire = () => {
+    // Navigate to the calendarFunction screen and pass the answers
+    navigation.navigate('calendarFunction', { answers });
+  };
+
   const renderQuestionnaire = () => {
     if (currentQuestion <= questions.length) {
       const question = questions[currentQuestion - 1];
+      const is1To10ScaleQuestion = question.includes('(1-10)'); // Adjust the check based on your question format
 
       return (
         <View style={styles.questionContainer}>
@@ -69,12 +89,38 @@ const quizQuestions = ({ navigation }) => {
               </TouchableOpacity>
             </View>
           ) : (
-            <TextInput
-              keyboardType="numeric"
-              placeholder="Enter your answer"
-              onChangeText={(text) => handleAnswer(text)}
-              style={styles.textInput}
-            />
+            <View>
+              {/* Platform-specific slider */}
+              {Platform.OS === 'web' ? (
+                <input
+                  type="range"
+                  min={1}
+                  max={10}
+                  step={1}
+                  value={sliderValue}
+                  onChange={(event) => handleSliderChange(Number(event.target.value))}
+                  style={{ width: 400, height: 40 }}
+                />
+              ) : (
+                <Slider
+                  style={{ width: 400, height: 40 }}
+                  minimumValue={1}
+                  maximumValue={10}
+                  step={1}
+                  value={sliderValue}
+                  onValueChange={handleSliderChange}
+                />
+              )}
+
+              <Text style={styles.sliderValueText}>{`Selected Value: ${sliderValue}`}</Text>
+
+              {/* Conditionally render the Confirm button for 1-10 scale questions */}
+              {is1To10ScaleQuestion && (
+                <TouchableOpacity onPress={() => handleAnswer(sliderValue)} style={styles.confirmButton}>
+                  <Text style={styles.confirmButtonText}>Confirm</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           )}
 
           {currentQuestion > 1 && (
@@ -88,28 +134,26 @@ const quizQuestions = ({ navigation }) => {
       // All questions answered
       console.log('Answers:', answers);
       // You can store or send the answers as needed
+
+      handleCompleteQuestionnaire();
+
       return <Text>Questionnaire completed!</Text>;
+
+      
+
+      
     }
   };
 
   return (
     <View style={styles.screen}>
-      <Text style={styles.text}>I am screen3</Text>
-
       {showQuestionnaire ? (
         renderQuestionnaire()
       ) : (
-        <TouchableOpacity onPress={() => setShowQuestionnaire(true)} style={styles.button}>
-          <Text style={styles.buttonText}>Start Questionnaire</Text>
+        <TouchableOpacity onPress={() => setShowQuestionnaire(true)} style={styles.startButton}>
+          <Text style={styles.startButtonText}>Start Questionnaire</Text>
         </TouchableOpacity>
       )}
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate('NestedScreen3', { msg: 'From Screen 3' })}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Click Me!</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -121,21 +165,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#00000025',
-  },
-  text: {
-    color: '#000',
-    fontWeight: '700',
-    fontSize: 30,
-  },
-  button: {
-    backgroundColor: '#0275d8',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    marginTop: 20,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 25,
   },
   questionContainer: {
     marginBottom: 20,
@@ -150,7 +179,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   answerButton: {
-    backgroundColor: '#0275d8',
+    backgroundColor: '#FF7F7F',
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -158,16 +187,23 @@ const styles = StyleSheet.create({
   answerText: {
     color: '#fff',
   },
-  textInput: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingLeft: 10,
+  sliderValueText: {
+    textAlign: 'center',
+    marginTop: 10,
+  },
+  confirmButton: {
+    backgroundColor: '#FF7F7F',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  confirmButtonText: {
+    color: '#fff',
   },
   backButton: {
     marginTop: 10,
-    backgroundColor: '#ccc',
+    backgroundColor: '#A9A9A9',
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius: 5,
@@ -175,6 +211,16 @@ const styles = StyleSheet.create({
   backButtonText: {
     color: '#000',
   },
+  startButton: {
+    backgroundColor: '#FF7F7F',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginTop: 20,
+  },
+  startButtonText: {
+    color: '#fff',
+    fontSize: 25,
+  },
 });
 
-export default quizQuestions;
+export default QuizQuestions;
